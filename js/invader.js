@@ -27,12 +27,39 @@ phina.define("MainScene", {
 
         this.backgroundColor = "black";
 
-        const player = Sprite("toma", 64, 64).addChildTo(this);
-        player.setFrameIndex(10, 64, 64);
-        player.x = this.gridX.center();
-        player.y = this.gridY.span(37);
+        const player = Player(
+            this.gridX.center(), this.gridY.span(37)).addChildTo(this);
     }
 });
+
+phina.define("Player", {
+        superClass: "Sprite",
+    init: function(x, y) {
+            this.superInit("toma", 64, 64);
+            this.setFrameIndex(10, 64, 64);
+            this.x = x;
+            this.y = y;
+            this.SPEED = 5;
+    },
+
+    update: function(app) {
+            const key = app.keyboard;
+
+            if (key.getKey("left")) {
+               this.x -= this.SPEED;
+               if (this.left < 0) {
+                   this.left = 0;
+               }
+            }
+            if (key.getKey("right")) {
+                this.x += this.SPEED;
+                if (this.right > SCREEN_WIDTH) {
+                    this.right = SCREEN_WIDTH;
+                }
+            }
+    }
+});
+
 
 phina.main(() => {
     const app = GameApp ({
